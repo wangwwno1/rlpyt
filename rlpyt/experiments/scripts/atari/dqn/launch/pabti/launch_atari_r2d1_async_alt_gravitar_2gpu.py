@@ -21,9 +21,10 @@ variant_levels = list()
 
 games = ["gravitar"]
 replays = [1.35]
+batch_Bs = [32]  # For 2-GPU optimization, 64/2.
 values = list(zip(games, replays))
 dir_names = ["{}_{}replay".format(*v) for v in values]
-keys = [("env", "game"), ("algo", "replay_ratio")]
+keys = [("env", "game"), ("algo", "replay_ratio"), ("algo", "batch_B")]
 variant_levels.append(VariantLevel(keys, values, dir_names))
 
 variants, log_dirs = make_variants(*variant_levels)
