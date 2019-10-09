@@ -11,7 +11,7 @@ class UniformSequenceReplay:
         self.batch_T = batch_T  # Can set dynamically.
 
     def sample_batch(self, batch_B, batch_T=None):
-        T_idxs, B_idxs = self.sample_idxs(batch_B, batch_T)
+        T_idxs, B_idxs, batch_T = self.sample_idxs(batch_B, batch_T)
         return self.extract_batch(T_idxs, B_idxs, batch_T)
 
     def sample_idxs(self, batch_B, batch_T=None):
@@ -23,7 +23,7 @@ class UniformSequenceReplay:
         if self.rnn_state_interval > 0:  # Some rnn states stored; only sample those.
             T_idxs = (T_idxs // self.rnn_state_interval) * self.rnn_state_interval
         B_idxs = np.random.randint(low=0, high=self.B, size=(batch_B,))
-        return T_idxs, B_idxs
+        return T_idxs, B_idxs, batch_T
 
 
 class UniformSequenceReplayBuffer(UniformSequenceReplay,
