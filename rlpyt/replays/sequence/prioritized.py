@@ -65,7 +65,7 @@ class PrioritizedSequenceReplay:
         return T, idxs
 
     def sample_batch(self, batch_B):
-        (tree_T_idxs, B_idxs), priorities = self.priority_tree.sample(
+        (T_idxs, B_idxs), priorities = self.priority_tree.sample(
             batch_B, unique=self.unique)
         if self.rnn_state_interval > 1:
             T_idxs = tree_T_idxs * self.rnn_state_interval
