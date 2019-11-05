@@ -29,6 +29,7 @@ class MinibatchRlBase(BaseRunner):
         n_steps = int(n_steps)
         log_interval_steps = int(log_interval_steps)
         affinity = dict() if affinity is None else affinity
+        min_itr_learn = getattr(self.algo, 'min_itr_learn', 0)
         save__init__args(locals())
 
     def startup(self):
@@ -125,7 +126,7 @@ class MinibatchRlBase(BaseRunner):
     def log_diagnostics(self, itr, traj_infos=None, eval_time=0):
         if itr > 0:
             self.pbar.stop()
-        if itr >= self.algo.min_itr_learn - 1:
+        if itr >= self.min_itr_learn - 1:
             self.save_itr_snapshot(itr)
         new_time = time.time()
         self._cum_time = new_time - self._start_time
@@ -247,7 +248,7 @@ class MinibatchRlEval(MinibatchRlBase):
         if itr > 0:
             self.pbar.stop()
 
-        if itr == 0 or itr >= self.algo.min_itr_learn - 1:
+        if itr >= self.min_itr_learn - 1 or itr == 0:
             logger.log("Evaluating agent...")
             self.agent.eval_mode(itr)  # Might be agent in sampler.
             eval_time = -time.time()
